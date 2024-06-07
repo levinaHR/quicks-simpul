@@ -13,7 +13,7 @@ export default function QuickButton({
   children,
 }) {
   return (
-    <div className="fixed bottom-7 right-8 flex flex-row gap-6">
+    <div className="flex flex-row gap-6">
       {/* Button */}
       <div className="order-last">
         {/* Default State */}

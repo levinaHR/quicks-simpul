@@ -13,10 +13,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Todo {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+model Task {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String
-  deadline    DateTime @default(now()) @db.Date
+  description String?
+  deadline    String
   completed   Boolean
 }
