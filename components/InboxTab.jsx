@@ -9,7 +9,9 @@ import {
   getOpenedChat,
   openChat,
 } from '@/lib/slices/inboxSlice';
-import { ListItem, Spinner } from '@material-tailwind/react';
+import Search from '@/public/icon/search.svg';
+import { Input, ListItem, Spinner } from '@material-tailwind/react';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatPanel from './ChatPanel';
@@ -42,7 +44,16 @@ export default function InboxTab() {
       {/* Inbox Tab */}
       <div className="absolute flex flex-col !flex-grow w-full h-full">
         {/* Search */}
-        <div>Search bar</div>
+        <div className="flex px-[86px] justify-between rounded-md border border-primary-gray-100">
+          <Input
+            placeholder="Search"
+            className="!p-0 !border-0 bg-white placeholder-primary-gray-100 placeholder:opacity-100"
+            labelProps={{
+              className: 'hidden',
+            }}
+          />
+          <Image src={Search} alt="img" width={12} />
+        </div>
 
         {/* Chat Group List */}
         {(inboxStatus === 'idle' || inboxStatus === 'loading') && (
