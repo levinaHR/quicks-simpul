@@ -341,7 +341,7 @@ export default function TaskItem({ item }) {
               </PopoverContent>
             </Popover>
 
-            <div className="flex gap-[10px]">
+            <div className="flex gap-[10px] overflow-x-auto">
               {stickers.map((sticker, i) => (
                 <>
                   <Chip
