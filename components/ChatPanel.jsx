@@ -239,7 +239,12 @@ export default function ChatPanel({ onClose }) {
               >
                 <hr className="flex-grow border-t border-[#4f4f4f]" />
                 <span className="px-3 font-semibold text-[#4f4f4f]">
-                  {moment(arr[0], 'DD/MM/YYYY').format('MMMM DD, YYYY')}
+                  {moment().format('MMMM DD, YYYY') ===
+                  moment(arr[0], 'DD/MM/YYYY').format('MMMM DD, YYYY')
+                    ? `Today ${moment(arr[0], 'DD/MM/YYYY').format(
+                        'MMMM DD, YYYY'
+                      )}`
+                    : moment(arr[0], 'DD/MM/YYYY').format('MMMM DD, YYYY')}
                 </span>
                 <hr className="flex-grow border-t border-[#4f4f4f]" />
               </div>
