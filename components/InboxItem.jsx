@@ -13,9 +13,9 @@ export default function InboxItem({ index, chatGroup }) {
   };
 
   return (
-    <div className="flex gap-4 py-[22px]">
+    <div className="flex gap-4 py-[22px] overflow-clip">
       {/* Icon */}
-      <div className="w-[51px]">
+      <div className="flex-shrink-0 w-[51px]">
         {getParticipants(chatGroup).length > 2 ? (
           <Image src={Participants} alt="img" width={51} />
         ) : (

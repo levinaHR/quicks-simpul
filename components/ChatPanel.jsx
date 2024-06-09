@@ -30,6 +30,13 @@ function ChatBubble({ participants, chat, onDelete }) {
     setOpen(!open);
   };
 
+  const handleDelete = () => {
+    if (chat.sender === 'You') {
+      onDelete();
+      setOpen(false);
+    }
+  };
+
   return (
     <div
       className={`${chat.sender === 'You' && 'items-end'} flex flex-col gap-1`}
@@ -64,16 +71,17 @@ function ChatBubble({ participants, chat, onDelete }) {
             />
           </PopoverHandler>
           <PopoverContent className="w-32 p-0 rounded-md border-[#BDBDBD] overflow-hidden">
-            <p className="px-3 py-2 text-primary hover:bg-primary-gray-50 cursor-pointer transition-colors duration-150 ease-in-out">
-              Edit
-            </p>
-            <hr className="border-[#BDBDBD]" />
+            {chat.sender === 'You' && (
+              <>
+                <p className="px-3 py-2 text-primary hover:bg-primary-gray-50 cursor-pointer transition-colors duration-150 ease-in-out">
+                  Edit
+                </p>
+                <hr className="border-[#BDBDBD]" />
+              </>
+            )}
             <p
               className="px-3 py-2 text-i-red hover:bg-primary-gray-50 cursor-pointer transition-colors duration-150 ease-in-out"
-              onClick={() => {
-                onDelete();
-                setOpen(false);
-              }}
+              onClick={handleDelete}
             >
               Delete
             </p>
