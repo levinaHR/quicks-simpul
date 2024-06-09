@@ -235,7 +235,7 @@ export default function ChatPanel({ onClose }) {
               {/* Date Divider */}
               <div
                 name={arr[0]}
-                className="mt-10 mb-2 flex items-center first:mt-5"
+                className="mt-10 mb-2 flex items-center first:hidden first:mt-5"
               >
                 <hr className="flex-grow border-t border-[#4f4f4f]" />
                 <span className="px-3 font-semibold text-[#4f4f4f]">

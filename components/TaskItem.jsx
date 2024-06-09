@@ -6,12 +6,15 @@ import EditActive from '@/public/icon/edit-active.svg';
 import Edit from '@/public/icon/edit.svg';
 import ScheduleActive from '@/public/icon/schedule-active.svg';
 import Schedule from '@/public/icon/schedule.svg';
+import StickerActive from '@/public/icon/sticker-active.svg';
+import Sticker from '@/public/icon/sticker.svg';
 import ThreeDots from '@/public/icon/three-dots.svg';
 import {
   Accordion,
   AccordionBody,
   AccordionHeader,
   Checkbox,
+  Chip,
   Input,
   Popover,
   PopoverContent,
@@ -24,10 +27,87 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import DatePicker from './DatePicker';
 
+const stickerOptions = [
+  {
+    label: 'Important ASAP',
+    color: 'bg-[#E5F1FF]',
+    peer: 'peer/s1',
+    peerChecked: 'peer-checked/s1:ring-primary',
+  },
+  {
+    label: 'Offline Meeting',
+    color: 'bg-[#FDCFA4]',
+    peer: 'peer/s2',
+    peerChecked: 'peer-checked/s2:ring-primary',
+  },
+  {
+    label: 'Virtual Meeting',
+    color: 'bg-[#F9E9C3]',
+    peer: 'peer/s3',
+    peerChecked: 'peer-checked/s3:ring-primary',
+  },
+  {
+    label: 'ASAP',
+    color: 'bg-[#AFEBDB]',
+    peer: 'peer/s4',
+    peerChecked: 'peer-checked/s4:ring-primary',
+  },
+  {
+    label: 'Client Related',
+    color: 'bg-[#CBF1C2]',
+    peer: 'peer/s5',
+    peerChecked: 'peer-checked/s5:ring-primary',
+  },
+  {
+    label: 'Self Task',
+    color: 'bg-[#CFCEF9]',
+    peer: 'peer/s6',
+    peerChecked: 'peer-checked/s6:ring-primary',
+  },
+  {
+    label: 'Appointments',
+    color: 'bg-[#F9E0FD]',
+    peer: 'peer/s7',
+    peerChecked: 'peer-checked/s7:ring-primary',
+  },
+  {
+    label: 'Court Related',
+    color: 'bg-[#9DD0ED]',
+    peer: 'peer/s8',
+    peerChecked: 'peer-checked/s8:ring-primary',
+  },
+];
+
+function StickerOptions({ stickers, onCheck }) {
+  return (
+    <div class="flex flex-col gap-3.5">
+      {stickerOptions.map((option, i) => (
+        <>
+          <input
+            id={i}
+            type="checkbox"
+            checked={stickers.includes(option.label)}
+            className={`${option.peer} hidden`}
+            onChange={() => onCheck(option.label)}
+          />
+          <label
+            for={i}
+            className={`${option.peerChecked} ${option.color} px-3.5 py-2 select-none cursor-pointer rounded-lg text-primary-gray-200
+            ring-1 ring-inset ring-transparent hover:bg-opacity-70 transition-all duration-200 ease-in-out`}
+          >
+            {option.label}
+          </label>
+        </>
+      ))}
+    </div>
+  );
+}
+
 export default function TaskItem({ item }) {
   const dispatch = useDispatch();
 
   const [task, setTask] = useState({});
+  const [stickers, setStickers] = useState([]);
   const [expandAccordion, setExpandAccordion] = useState(false);
   const [openMore, setOpenMore] = useState(false);
   const [editTitle, setEditTitle] = useState(false);
@@ -35,6 +115,7 @@ export default function TaskItem({ item }) {
 
   useEffect(() => {
     setTask(item);
+    setStickers(item.stickers);
   }, [item]);
 
   const countDaysLeft = (deadline) => {
@@ -86,6 +167,22 @@ export default function TaskItem({ item }) {
   const handleDeleteTask = async () => {
     setOpenMore(false);
     await dispatch(deleteTask(task)).unwrap();
+  };
+
+  // Sticker Functions
+  const handleStickerCheck = (sticker) => {
+    let temp = [...stickers];
+
+    if (!temp.includes(sticker)) {
+      temp.push(sticker);
+    } else {
+      temp.splice(temp.indexOf(sticker), 1);
+    }
+    setStickers(temp);
+  };
+  const handleUpdateStickers = async () => {
+    setTask({ ...task, stickers: stickers });
+    await dispatch(updateTask({ id: task.id, stickers: stickers })).unwrap();
   };
 
   return (
@@ -183,49 +280,87 @@ export default function TaskItem({ item }) {
         </div>
       </AccordionHeader>
       <AccordionBody className="pb-0">
-        <div className="flex">
-          <div className="ml-10 flex flex-col !flex-grow gap-y-3">
-            {/* Task Deadline Date Picker */}
-            <div className="flex gap-[18px] items-center">
-              <Image
-                src={task.deadline ? ScheduleActive : Schedule}
-                alt="img"
-                width={20}
-              />
-              <DatePicker taskId={task.id} value={task.deadline} />
-            </div>
-            {/* Task Description */}
-            <div className="flex gap-[18px] items-start">
-              <Image
-                src={task.description ? EditActive : Edit}
-                alt="img"
-                width={20}
-                className="!shrink-0"
-                onClick={() => setEditDesc(true)}
-              />
-              {editDesc ? (
-                <div className="w-full border border-primary-gray-100 rounded-md">
-                  <Textarea
-                    autoFocus={editDesc}
-                    value={task.description}
-                    className="border-none"
-                    labelProps={{
-                      className: 'before:content-none after:content-none',
-                    }}
-                    onChange={({ target }) =>
-                      setTask({ ...task, description: target.value })
-                    }
-                    onBlur={task.isNew ? handleCreateTask : handleUpdateDesc}
+        <div className="ml-10 flex flex-col !flex-grow gap-y-3">
+          {/* Task Deadline Date Picker */}
+          <div className="flex gap-[18px] items-center">
+            <Image
+              src={task.deadline ? ScheduleActive : Schedule}
+              alt="img"
+              width={20}
+            />
+            <DatePicker taskId={task.id} value={task.deadline} />
+          </div>
+          {/* Task Description */}
+          <div className="flex gap-[18px] items-start">
+            <Image
+              src={task.description ? EditActive : Edit}
+              alt="img"
+              width={20}
+              className="!shrink-0"
+              onClick={() => setEditDesc(true)}
+            />
+            {editDesc ? (
+              <div className="w-full border border-primary-gray-100 rounded-md">
+                <Textarea
+                  autoFocus={editDesc}
+                  value={task.description}
+                  className="border-none"
+                  labelProps={{
+                    className: 'before:content-none after:content-none',
+                  }}
+                  onChange={({ target }) =>
+                    setTask({ ...task, description: target.value })
+                  }
+                  onBlur={task.isNew ? handleCreateTask : handleUpdateDesc}
+                />
+              </div>
+            ) : (
+              <p onClick={() => setEditDesc(true)}>
+                {task.description || 'No Description'}
+              </p>
+            )}
+          </div>
+          {/* Task Sticker */}
+          <div className="flex my-2 mr-2 gap-[18px] items-center rounded-sm ring-8 ring-[#F9F9F9] bg-[#F9F9F9]">
+            <Popover placement="bottom-start">
+              <PopoverHandler>
+                <Image
+                  src={stickers.length === 0 ? Sticker : StickerActive}
+                  alt="img"
+                  width={20}
+                />
+              </PopoverHandler>
+              <PopoverContent
+                onBlur={handleUpdateStickers}
+                className="w-full max-w-72 min-w-48 p-3.5 rounded-md border-[#BDBDBD] overflow-hidden"
+              >
+                <StickerOptions
+                  stickers={stickers}
+                  onCheck={handleStickerCheck}
+                />
+              </PopoverContent>
+            </Popover>
+
+            <div className="flex gap-[10px]">
+              {stickers.map((sticker, i) => (
+                <>
+                  <Chip
+                    key={i}
+                    value={sticker}
+                    className={`${
+                      stickerOptions.findIndex(
+                        (option) => option.label === sticker
+                      ) !== -1
+                        ? stickerOptions.find(
+                            (option) => option.label === sticker
+                          ).color
+                        : ''
+                    } normal-case rounded-md text-primary-gray-200`}
                   />
-                </div>
-              ) : (
-                <p onClick={() => setEditDesc(true)}>
-                  {task.description || 'No Description'}
-                </p>
-              )}
+                </>
+              ))}
             </div>
           </div>
-          <div className="ml-4" />
         </div>
       </AccordionBody>
     </Accordion>
