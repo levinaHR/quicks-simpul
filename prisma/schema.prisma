@@ -20,3 +20,16 @@ model Task {
   deadline    String
   completed   Boolean
 }
+
+model ChatGroup {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  title   String
+  chatlog Chat[]
+}
+
+type Chat {
+  sender  String
+  date    String
+  time    String
+  content String
+}

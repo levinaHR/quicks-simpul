@@ -104,7 +104,7 @@ export default function TaskTab() {
         </div>
       )}
       {taskStatus === 'succeeded' && (
-        <div className="divide-y divide-primary-gray-100">
+        <div className="divide-y divide-primary-gray-100 overflow-y-auto">
           {taskList
             .slice()  // creating copy of taskList to avoid mutating original state due to reverse function
             .reverse()

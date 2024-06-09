@@ -55,7 +55,9 @@ export default function TaskItem({ item }) {
     setExpandAccordion(!expandAccordion);
   };
   const handleOpenMore = () => {
-    setOpenMore(!openMore);
+    if (!task.isNew) {
+      setOpenMore(!openMore);
+    }
   };
 
   const handleCreateTask = async () => {
@@ -90,6 +92,7 @@ export default function TaskItem({ item }) {
     <Accordion
       open={task.isNew ? true : expandAccordion}
       icon={
+        // More Action
         <Popover
           placement="bottom-end"
           open={openMore}
@@ -103,13 +106,13 @@ export default function TaskItem({ item }) {
             <Image src={ThreeDots} alt="img" width={20} />
           </PopoverHandler>
           <PopoverContent
-            className="w-32 p-1 rounded-md border-primary-gray-100"
+            className="w-32 p-0 rounded-md border-[#BDBDBD] overflow-hidden"
             onClick={(event) => {
               event.stopPropagation();
             }}
           >
             <p
-              className="px-3 py-2 text-i-red hover:text-i-red rounded-md hover:bg-primary-gray-50 cursor-pointer transition-colors duration-150 ease-in-out"
+              className="px-3 py-2 text-i-red hover:bg-primary-gray-50 cursor-pointer transition-colors duration-150 ease-in-out"
               onClick={handleDeleteTask}
             >
               Delete
@@ -137,22 +140,20 @@ export default function TaskItem({ item }) {
           {/* Task Title */}
           <div className={`${(editTitle || task.isNew) && 'w-full'} max-w-80`}>
             {editTitle || task.isNew ? (
-              <div className="w-full border border-primary-gray-100 rounded-md">
-                <Input
-                  autoFocus
-                  placeholder="Type Task Title"
-                  value={task.title}
-                  className="border-none"
-                  labelProps={{
-                    className: 'before:content-none after:content-none',
-                  }}
-                  onClick={(event) => event.stopPropagation()}
-                  onChange={({ target }) => {
-                    setTask({ ...task, title: target.value });
-                  }}
-                  onBlur={editTitle ? handleUpdateTitle : handleCreateTask}
-                />
-              </div>
+              <Input
+                autoFocus
+                placeholder="Type Task Title"
+                value={task.title}
+                className="!border !border-primary-gray-100 bg-white placeholder:opacity-100"
+                labelProps={{
+                  className: 'hidden',
+                }}
+                onClick={(event) => event.stopPropagation()}
+                onChange={({ target }) => {
+                  setTask({ ...task, title: target.value });
+                }}
+                onBlur={editTitle ? handleUpdateTitle : handleCreateTask}
+              />
             ) : (
               <p
                 className={

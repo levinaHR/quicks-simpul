@@ -1,10 +1,11 @@
 'use client';
 
+import InboxTab from '@/components/InboxTab';
 import QuickButton from '@/components/QuickButton';
 import QuickItem from '@/components/QuickItem';
 import TaskTab from '@/components/TaskTab';
-import MsgWhiteIcon from '@/public/icon/msg-white.svg';
-import MsgIcon from '@/public/icon/msg.svg';
+import InboxWhiteIcon from '@/public/icon/inbox-white.svg';
+import InboxIcon from '@/public/icon/inbox.svg';
 import TaskWhiteIcon from '@/public/icon/task-white.svg';
 import TaskIcon from '@/public/icon/task.svg';
 import { Card, CardBody, Collapse } from '@material-tailwind/react';
@@ -20,10 +21,10 @@ const tabs = [
   },
   {
     title: 'Inbox',
-    icon: MsgIcon,
-    activeIcon: MsgWhiteIcon,
+    icon: InboxIcon,
+    activeIcon: InboxWhiteIcon,
     activeColor: '#8785FF',
-    content: null,
+    content: <InboxTab />,
   },
 ];
 

@@ -22,9 +22,12 @@ module.exports = withMT({
         'i-yellow': '#EB5757',
         'i-purple': '#8785FF',
         'i-green': '#43B78D',
+        'ci-yellow': '#E5A443',
+        'ci-purple': '#9B51E0',
+        'ci-green': '#43B78D',
         'c-yellow': '#FCEED3',
         'c-purple': '#EEDCFF',
-        'c-green': '#EEDCFF',
+        'c-green': '#D2F2EA',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
